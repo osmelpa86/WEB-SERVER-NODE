@@ -5,6 +5,7 @@ import accountRouter from "./routes/account.js";
 import authRouter from "./routes/auth.js";
 import authSessionRouter from "./routes/auth_session.js";
 import authTokenRouter from "./routes/auth_token.js";
+import mongoose from "mongoose";
 
 dotenv.config();
 
@@ -22,6 +23,11 @@ expressApp.use("/auth", authRouter);
 expressApp.use("/auth-token", authTokenRouter);
 expressApp.use("/auth-session", authSessionRouter);
 
-expressApp.listen(PORT, () =>
-  console.log(`Servidor levantado en el puerto ${PORT}`)
-);
+const boostrap = async () => {
+  await mongoose.connect(process.env.MONGODB_URL);
+  expressApp.listen(PORT, () =>
+    console.log(`Servidor levantado en el puerto ${PORT}`)
+  );
+};
+
+boostrap();
